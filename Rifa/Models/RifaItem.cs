@@ -2,6 +2,6 @@
 {
     public class RifaItem
     {
-        public int Number { get; set; }
+        public int Id { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace Rifa.Controllers
             return Enumerable.Range(1, 100)
                 .Select(index => new RifaItem
                 {
-                    Number = index
+                    Id = index
                 });
         }
     }
