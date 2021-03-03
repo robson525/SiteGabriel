@@ -5,32 +5,30 @@ body {
     margin: 0 !important;
     padding: 0 !important;
 }
-body {
-    height: 100vh !important;
-}
 
 #react-app {
-    height: 100% !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 #layout {
-    height: 100%;
+    flex-grow: 1;
+    width: 100%;
 }
 
 #home {
     padding-top: 10%;
     padding-bottom: 10%;
-    height: 100%;
 }
 
 #home #home-central {
-    height: 100%;
     box-shadow: -10px 10px 10px black;
     border-radius: 25px;
 }
 
 #home #home-content {
-    height: 100%;
+    padding: 30px 10px;
 }
 
 #home .title {
@@ -42,6 +40,39 @@ body {
     font-family: 'Lobster', cursive;
 }
 
+#loading {
+    text-align: center;
+}
+#loading img{
+    width: 10%;
+}
+
+#table {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: stretch;
+}
+
+#table .cell {
+    margin: 5px;
+    text-align: center;
+    font-size: 1.5em;
+    padding: 5px;
+    width: calc(10% - 10px);
+    min-width: 50px;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: -1px 1px 1px grey;
+}
+
+#table .cell.odd {
+    background-color: azure;
+}
+#table .cell.even {
+    background-color: white;
+}
+
+/* ---------------------------------------------------- */
 
 .main-nav li .glyphicon {
     margin-right: 10px;
