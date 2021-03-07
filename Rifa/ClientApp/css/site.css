@@ -80,8 +80,14 @@ body {
     background-color: white;
 }
 
-/* ---------------------------------------------------- */
+.form .btn {
+    margin-right: 5px;
+}
 
+.form-group textarea {
+    resize: vertical;
+}
+/* ---------------------------------------------------- */
 .main-nav li .glyphicon {
     margin-right: 10px;
 }

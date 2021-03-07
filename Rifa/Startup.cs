@@ -54,6 +54,8 @@ namespace Rifa
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+
+            DataBase.Instance.Load();
         }
     }
 }

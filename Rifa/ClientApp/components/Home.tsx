@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { Loading } from "./Loading";
+
 interface TableState {
     rifaItems: RifaItem[];
     loading: boolean;
@@ -11,7 +13,7 @@ export class Home extends React.Component<RouteComponentProps<{}>, TableState> {
         super();
         this.state = { rifaItems: [], loading: true };
 
-        fetch('api/Table/LoadRifaItems')
+        fetch('api/Item')
             .then(response => response.json() as Promise<RifaItem[]>)
             .then(data => {
                 this.setState({ rifaItems: data, loading: false });
@@ -21,19 +23,13 @@ export class Home extends React.Component<RouteComponentProps<{}>, TableState> {
     }
 
     public render() {
-        return this.state.loading ? this.loadLoading() : this.loadTable(this.state.rifaItems);
+        return this.state.loading ? <Loading /> : this.loadTable(this.state.rifaItems);
     }
-
-    private loadLoading() {
-        return <div id="loading">
-                   <img src={require('../img/loading.gif')} />
-               </div>;
-    }
-
+    
     private loadTable(itens: RifaItem[]) {
         return <div id="table">
                    {itens.map(item =>
-                       <a className={`cell ${item.id % 2 == 0 ? "even" : "odd"}`}
+                       <a key={`item-${item.id}`} className={`cell ${item.id % 2 == 0 ? "even" : "odd"}`}
                           onClick={() => this.handleEdit(item)}>
                            {item.id}
                        </a>
@@ -44,8 +40,4 @@ export class Home extends React.Component<RouteComponentProps<{}>, TableState> {
     private handleEdit(item: RifaItem) {
         this.props.history.push("/edit/" + item.id);
     }
-}
-
-interface RifaItem {
-    id: number;
 }
