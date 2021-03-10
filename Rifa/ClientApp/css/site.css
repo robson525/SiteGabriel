@@ -87,6 +87,16 @@ body {
 .form-group textarea {
     resize: vertical;
 }
+
+.form-group label {
+    text-shadow: -1px 1px 1px white;
+}
+
+form .help-block {
+    font-weight: bold;
+    text-align: center;
+    text-shadow: -1px 1px 1px white;
+}
 /* ---------------------------------------------------- */
 .main-nav li .glyphicon {
     margin-right: 10px;

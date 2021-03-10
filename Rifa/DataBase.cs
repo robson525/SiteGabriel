@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rifa.Models;
@@ -54,12 +55,17 @@ namespace Rifa
             this.Save();
         }
 
-        private void Save()
+        public void Save()
         {
             File.WriteAllText(FileLocation, JsonConvert.SerializeObject(_items, Formatting.Indented));
         }
 
-        public bool Save(RifaItem item)
+        public async Task<bool> Save(RifaItem item)
+        {
+            return await TaskEx.Run(() => SaveItem(item));
+        }
+
+        private bool SaveItem(RifaItem item)
         {
             lock (_lock)
             {

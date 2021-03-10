@@ -22,6 +22,14 @@ namespace Rifa
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.Cookie.HttpOnly = true;
+            });
+
             services.AddMvc();
         }
 
@@ -43,6 +51,7 @@ namespace Rifa
             }
 
             app.UseStaticFiles();
+            app.UseSession();
 
             app.UseMvc(routes =>
             {
