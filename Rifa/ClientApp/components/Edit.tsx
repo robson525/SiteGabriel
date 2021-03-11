@@ -88,10 +88,8 @@ export class Edit extends React.Component<RouteComponentProps<{}>, EditState> {
                 method: 'DELETE',
                 headers: HEADER,
             })
-            .then((response) => {
-                if (response.ok) {
-                    this.props.history.goBack();
-                }
+            .then(() => {
+                this.props.history.goBack();
             });
     }
 
