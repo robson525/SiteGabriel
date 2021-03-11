@@ -66,7 +66,7 @@ body {
     text-decoration: none;
 }
 
-#table a.cell:hover {
+#table a.cel:not(.reserved):hover {
     background-color: #9CCAD1;
 }
 #table .cell:active {
@@ -79,6 +79,11 @@ body {
 #table .cell.even {
     background-color: white;
 }
+#table .cell.reserved {
+    background-color: cadetblue;
+}
+
+
 
 .form .btn {
     margin-right: 5px;
@@ -96,6 +101,10 @@ form .help-block {
     font-weight: bold;
     text-align: center;
     text-shadow: -1px 1px 1px white;
+}
+
+.edit-message .alert {
+    text-align: center;
 }
 /* ---------------------------------------------------- */
 .main-nav li .glyphicon {

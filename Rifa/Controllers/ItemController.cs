@@ -14,9 +14,14 @@ namespace Rifa.Controllers
     [Route("api/[controller]")]
     public class ItemController : Controller
     {
+        private const string SessionInfoId = "SiteGabriel";
+
         [HttpGet]
         public IEnumerable<RifaItem> GetItems()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(SessionInfoId)))
+                HttpContext.Session.SetString(SessionInfoId, HttpContext.Session.Id);
+
             return DataBase.Instance.Items;
         }
 
@@ -27,11 +32,12 @@ namespace Rifa.Controllers
             RifaItem item = DataBase.Instance.Items.FirstOrDefault(_ => _.Id == id);
             if (item == null) return BadRequest();
 
-            if (item.Status != RifaItem.ItemStatus.Idle && item.SessionId != HttpContext.Session.Id)
-                return Unauthorized();
+            if (item.Status != RifaItem.ItemStatus.Idle)
+                if (item.Status == RifaItem.ItemStatus.Reserving && item.SessionId != HttpContext.Session.Id)
+                    return Unauthorized();
 
             item.SessionId = HttpContext.Session.Id;
-            item.Status = RifaItem.ItemStatus.Reserving;
+            item.SetStatus(RifaItem.ItemStatus.Reserving);
             await DataBase.Instance.Save(item);
             return Ok(item);
         }
@@ -44,7 +50,13 @@ namespace Rifa.Controllers
             if (id != item.Id)
                 return BadRequest();
 
-            item.Status = RifaItem.ItemStatus.Reserved;
+            RifaItem itemDB = DataBase.Instance.Items.FirstOrDefault(_ => _.Id == id);
+            if (itemDB == null) return BadRequest();
+
+            if (itemDB.Status != RifaItem.ItemStatus.Reserving && itemDB.Status != RifaItem.ItemStatus.Idle || itemDB.SessionId != HttpContext.Session.Id)
+                return Unauthorized();
+
+            item.SetStatus(RifaItem.ItemStatus.Reserved);
             await DataBase.Instance.Save(item);
             return Ok();
         }
@@ -61,7 +73,7 @@ namespace Rifa.Controllers
             if (item.Status != RifaItem.ItemStatus.Reserving)
                 return Unauthorized();
 
-            item.Status = RifaItem.ItemStatus.Idle;
+            item.SetStatus(RifaItem.ItemStatus.Idle);
             await DataBase.Instance.Save(item);
             return Ok();
         }

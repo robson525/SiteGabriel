@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System.Timers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rifa.Models;
@@ -15,14 +17,14 @@ namespace Rifa
 
         public static DataBase Instance => _instance ?? (_instance = new DataBase());
 
-        private DataBase() { }
-
         #endregion
 
         public const int MaxLength = 100;
         public const string FileLocation = @".\database.json";
+        public const string BackupFolder = @".\Backup";
 
         private RifaItems _items = new RifaItems();
+        private readonly Timer _timer = new Timer();
         private readonly object _lock = new object();
 
         public IEnumerable<RifaItem> Items
@@ -34,6 +36,16 @@ namespace Rifa
             }
         }
 
+        private DataBase()
+        {
+            if (!Directory.Exists(BackupFolder))
+                Directory.CreateDirectory(BackupFolder);
+
+            _timer.Elapsed += delegate { this.Backup(); };
+            _timer.Interval = 1000 * 60 * 60;
+            _timer.Start();
+        }
+        
         public void Load()
         {
             using (StreamReader file = File.OpenText(FileLocation))
@@ -43,7 +55,10 @@ namespace Rifa
             }
 
             if (_items.Items.Count == MaxLength)
+            {
+                this.Backup();
                 return;
+            }
 
             int count = _items.Items.Count + 1;
             while (count <= MaxLength)
@@ -53,6 +68,7 @@ namespace Rifa
             }
 
             this.Save();
+            this.Backup();
         }
 
         public void Save()
@@ -74,6 +90,31 @@ namespace Rifa
             }
 
             return true;
+        }
+
+        private void Backup()
+        {
+            string file = string.Format("{0}{1}{2}{3}", 
+                Path.GetFileNameWithoutExtension(FileLocation),
+                "_",
+                DateTime.Now.ToString("HHmmss"),
+                Path.GetExtension(FileLocation)
+                );
+
+            string path = Path.Combine(
+                BackupFolder,
+                DateTime.Now.ToString("yyyyMMdd")
+            );
+
+            string fullFile = Path.Combine(path, file);
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            lock (_lock)
+            {
+                File.Copy(FileLocation, fullFile);
+            }
         }
     }
 }

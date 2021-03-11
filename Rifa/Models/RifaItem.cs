@@ -54,6 +54,7 @@ namespace Rifa.Models
 
             if (this.Status != ItemStatus.Reserving) return;
 
+            this.SessionId = string.Empty;
             this.Status = ItemStatus.Idle;
             DataBase.Instance.Save();
         }

@@ -29,7 +29,7 @@ export class Home extends React.Component<RouteComponentProps<{}>, TableState> {
     private loadTable(itens: RifaItem[]) {
         return <div id="table">
                    {itens.map(item =>
-                       <a key={`item-${item.id}`} className={`cell ${item.id % 2 == 0 ? "even" : "odd"}`}
+                       <a key={`item-${item.id}`} className={`cell ${item.status !== 0 ? "reserved" : item.id % 2 == 0 ? "even" : "odd"}`}
                           onClick={() => this.handleEdit(item)}>
                            {item.id}
                        </a>

@@ -11,6 +11,7 @@ interface EditState {
     loading: boolean;
     id: number;
     item: RifaItem;
+    saved: boolean;
     error: boolean;
     message: string;
 }
@@ -21,7 +22,7 @@ export class Edit extends React.Component<RouteComponentProps<{}>, EditState> {
 
         var params: Record<string, any> = this.props.match.params;
 
-        this.state = (({ loading: true, id: params.id, error: false }) as any);
+        this.state = (({ loading: true, id: params.id, error: false, saved: false }) as any);
 
         fetch(`api/Item/${params.id}`)
             .then(response => {
@@ -34,14 +35,11 @@ export class Edit extends React.Component<RouteComponentProps<{}>, EditState> {
                     let msg = "";
                     switch (response.status) {
                         case 400: msg = "O Numero selecionado não existe"; break;
-                        case 401: msg = "O Numero selecionado já está em uso"; break;
+                        case 401: msg = "O Numero selecionado já está reservado"; break;
                         default: msg = "Operação Inválida"; break;
                     }
                     this.setState({ loading: false, error: true, message: msg });
                 }
-            })
-            .catch(error => {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
             });
 
         this.handleSave = this.handleSave.bind(this);
@@ -49,7 +47,8 @@ export class Edit extends React.Component<RouteComponentProps<{}>, EditState> {
     }
 
     public render() {
-        return this.state.loading ? <Loading /> : this.state.error ? this.loadError() : this.loadEdit(this.state.item);
+        return this.state.loading ? <Loading /> :
+            (this.state.error || this.state.saved) ? this.loadMessage() : this.loadEdit(this.state.item);
     }
 
     private handleSave(e: any) {
@@ -57,7 +56,6 @@ export class Edit extends React.Component<RouteComponentProps<{}>, EditState> {
 
         let item: RifaItem = {
             id: this.state.id,
-            sessionId: this.state.item.sessionId,
             name: e.target.name.value,
             email: e.target.email.value,
             comment: e.target.comment.value,
@@ -72,13 +70,19 @@ export class Edit extends React.Component<RouteComponentProps<{}>, EditState> {
             })
             .then((response) => {
                 if (response.ok) {
-                    this.props.history.goBack();
+                    this.setState({ saved: true, message: "Numero reservado com sucess"});
+                } else {
+                    let msg = "";
+                    switch (response.status) {
+                    case 401: msg = "O Numero selecionado já está em uso"; break;
+                    default: msg = "Operação Inválida"; break;
+                    }
+                    this.setState({ error: true, message: msg });
                 }
             });
     }
 
     private handleCancel() {
-        console.log("handleCancel", this.state.id);
         fetch(`api/Item/${this.state.id}`,
             {
                 method: 'DELETE',
@@ -104,8 +108,8 @@ export class Edit extends React.Component<RouteComponentProps<{}>, EditState> {
                 <input type="email" className="form-control" id="email" name="email" placeholder="Email" required={true} defaultValue={item.email} maxLength={50} />
             </div>
             <div className="form-group">
-                <label htmlFor="comment">Comentário</label>
-                <textarea className="form-control" id="comment" name="comment" placeholder="Comentário" defaultValue={item.comment} rows={5} maxLength={500} />
+                <label htmlFor="comment">Deixe uma mensagem para Papai, Mamãe e Gabriel</label>
+                <textarea className="form-control" id="comment" name="comment" placeholder="Mensagem" defaultValue={item.comment} rows={5} maxLength={500} />
             </div>
 
             <a className="btn btn-default" onClick={this.handleCancel}>Cancelar</a>
@@ -113,10 +117,10 @@ export class Edit extends React.Component<RouteComponentProps<{}>, EditState> {
         </form>;
     }
 
-    private loadError() {
-        return <div>
+    private loadMessage() {
+        return <div className="edit-message">
             <h1 className="title">Nº: {this.state.id}</h1>
-            <div className="alert alert-danger" role="alert">{this.state.message}</div>
+            <div className={'alert alert-' + (this.state.saved ? 'success' : 'danger')} role="alert">{this.state.message}</div>
             <a className="btn btn-default center" onClick={() => this.props.history.goBack()}>Voltar</a>
         </div>;
     }
