@@ -31,11 +31,7 @@ namespace Rifa.Models
         {
             _timer = new Timer();
             _timer.Elapsed += Timer_Elapsed;
-#if DEBUG
-            _timer.Interval = 1000 * 60 * 1;
-#else
             _timer.Interval = 1000 * 60 * 20;
-#endif
         }
 
         public void SetStatus(ItemStatus status)

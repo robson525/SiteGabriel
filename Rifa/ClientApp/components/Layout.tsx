@@ -14,7 +14,7 @@ export class Layout extends React.Component<LayoutProps, {}> {
                         <div>
                             <p className="title">Chá Rifa do Gabriel</p>
                             <p className="sub-title">Cada numero da rifa R$ 20,00</p>
-                            <p className="sub-title">O sorteio será realizado dia 5 de Abril</p>
+                            <p className="sub-title">O sorteio será dia 5 de Abril</p>
                             <p className="sub-title">Ecolha seu número e boa sorte!</p>
                         </div>
                         {this.props.children}
