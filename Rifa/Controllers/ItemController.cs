@@ -55,11 +55,13 @@ namespace Rifa.Controllers
             RifaItem itemDb = DataBase.Instance.Items.FirstOrDefault(_ => _.Id == id);
             if (itemDb == null) return BadRequest();
 
-            if (itemDb.Status != RifaItem.ItemStatus.Idle && itemDb.Status != RifaItem.ItemStatus.Reserving || itemDb.SessionId != HttpContext.Session.Id)
+            if (itemDb.Status > RifaItem.ItemStatus.Reserved || itemDb.SessionId != HttpContext.Session.Id)
                 return Unauthorized();
 
             item.SessionId = itemDb.SessionId;
             item.SetStatus(itemDb.Status == RifaItem.ItemStatus.Reserving ? RifaItem.ItemStatus.Reserved : itemDb.Status);
+            Mail.Instance.Reserved(item);
+
             await DataBase.Instance.Save(item);
             return Ok();
         }

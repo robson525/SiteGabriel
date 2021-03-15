@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Timers;
 
 namespace Rifa.Models
@@ -24,6 +25,8 @@ namespace Rifa.Models
         public string Email { get; set; }
 
         public string Comment { get; set; }
+
+        public DateTime Date { get; set; }
 
         private readonly Timer _timer;
 

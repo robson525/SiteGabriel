@@ -83,6 +83,7 @@ namespace Rifa
 
         private bool SaveItem(RifaItem item)
         {
+            item.Date = DateTime.Now;
             lock (_lock)
             {
                 this._items.Items[item.Id - 1] = item;
