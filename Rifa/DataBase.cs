@@ -21,7 +21,7 @@ namespace Rifa
 
         public const int MaxLength = 100;
         public const string FileLocation = @".\database.json";
-        public const string BackupFolder = @".\Backup";
+        public const string BackupFolder = @"..\Backup";
 
         private RifaItems _items = new RifaItems();
         private readonly Timer _timer = new Timer();

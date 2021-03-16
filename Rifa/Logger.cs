@@ -29,7 +29,7 @@ namespace Rifa
 
         #endregion
 
-        public const string LogFolder = @".\Log";
+        public const string LogFolder = @"..\Log";
 
         private readonly Timer _timer = new Timer();
         private readonly ConcurrentQueue<string> _queue = new ConcurrentQueue<string>();

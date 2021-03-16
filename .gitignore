@@ -1,3 +1,5 @@
 .vs
-publish
+publish/
+Log/
+Backup/
 /Rifa/database.json
