@@ -90,6 +90,7 @@ namespace Rifa
                 this.Save();
             }
 
+            Logger.Instance.WriteInfo($"Item saved: {item}");
             return true;
         }
 
@@ -111,6 +112,8 @@ namespace Rifa
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
+
+            Logger.Instance.WriteInfo($"Creating Backup: {fullFile}");
 
             lock (_lock)
             {

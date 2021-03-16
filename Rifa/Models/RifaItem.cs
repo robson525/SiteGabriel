@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Timers;
+using Newtonsoft.Json;
 
 namespace Rifa.Models
 {
@@ -35,6 +36,11 @@ namespace Rifa.Models
             _timer = new Timer();
             _timer.Elapsed += Timer_Elapsed;
             _timer.Interval = 1000 * 60 * 20;
+        }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
         }
 
         public void SetStatus(ItemStatus status)
