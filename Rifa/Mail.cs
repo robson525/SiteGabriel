@@ -25,6 +25,10 @@ namespace Rifa
 
         public async Task<bool> Reserved(RifaItem item)
         {
+#if DEBUG
+            return true;
+#endif
+
             return await TaskEx.Run(() =>
             {
                 string message = Resource.Reserved
@@ -62,11 +66,13 @@ namespace Rifa
 
                 client.Send(message);
                 message.Dispose();
+                Logger.Instance.WriteInfo($"Email set to: {item}");
 
                 return true;
             }
             catch (Exception ex)
             {
+                Logger.Instance.WriteError($"Sending email to: {item}", ex);
                 return false;
             }
         }

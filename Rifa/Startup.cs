@@ -64,6 +64,7 @@ namespace Rifa
                     defaults: new { controller = "Home", action = "Index" });
             });
 
+            Logger.Instance.WriteInfo("********** STATING **********");
             DataBase.Instance.Load();
         }
     }
