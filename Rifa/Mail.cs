@@ -25,6 +25,10 @@ namespace Rifa
 
         public async Task<bool> Reserved(RifaItem item)
         {
+#if DEBUG
+            return true;
+#endif
+
             return await TaskEx.Run(() =>
             {
                 string message = Resource.Reserved
