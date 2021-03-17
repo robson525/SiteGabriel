@@ -2,6 +2,8 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { Loading } from "./Loading";
+import { Header } from "./Header";
+import { Footer } from "./Footer";
 
 interface TableState {
     rifaItems: RifaItem[];
@@ -25,17 +27,21 @@ export class Home extends React.Component<RouteComponentProps<{}>, TableState> {
     public render() {
         return this.state.loading ? <Loading /> : this.loadTable(this.state.rifaItems);
     }
-    
+
     private loadTable(itens: RifaItem[]) {
-        console.log(itens);
-        return <div id="table">
-                   {itens.map(item =>
-                       <a key={`item-${item.id}`} className={`cell ${item.status != 0 ? "reserved" : (item.id % 2 == 0 ? "even" : "odd")}`}
-                          onClick={() => this.handleEdit(item)}>
-                           {item.id}
-                       </a>
-                   )}
-               </div>;
+
+        return <div>
+            <Header />
+            <div id="table">
+                {itens.map(item =>
+                    <a key={`item-${item.id}`} className={`cell ${item.status != 0 ? "reserved" : (item.id % 2 == 0 ? "even" : "odd")}`}
+                        onClick={() => this.handleEdit(item)}>
+                        {item.id}
+                    </a>
+                )}
+            </div>
+            <Footer />
+        </div>;
     }
 
     private handleEdit(item: RifaItem) {

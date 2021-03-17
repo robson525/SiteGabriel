@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { Loading } from "./Loading";
-import { Footer } from "./Footer";
 
 const HEADER = {
     'Accept': 'application/json',
@@ -17,7 +16,7 @@ interface EditState {
     message: string;
 }
 
-export class Edit extends React.Component<RouteComponentProps<{}>, EditState> {
+export class EditAdmin extends React.Component<RouteComponentProps<{}>, EditState> {
     constructor(props: any) {
         super(props);
 
@@ -25,7 +24,7 @@ export class Edit extends React.Component<RouteComponentProps<{}>, EditState> {
 
         this.state = (({ loading: true, id: params.id, error: false, saved: false }) as any);
 
-        fetch(`api/Item/${params.id}`)
+        fetch(`api/Admin/${params.id}`)
             .then(response => {
                 if (response.ok) {
                     (response.json() as Promise<RifaItem>)
@@ -36,7 +35,6 @@ export class Edit extends React.Component<RouteComponentProps<{}>, EditState> {
                     let msg = "";
                     switch (response.status) {
                         case 400: msg = "O Numero selecionado não existe"; break;
-                        case 401: msg = "O Numero selecionado já está reservado"; break;
                         default: msg = "Operação Inválida"; break;
                     }
                     this.setState({ loading: false, error: true, message: msg });
@@ -115,8 +113,6 @@ export class Edit extends React.Component<RouteComponentProps<{}>, EditState> {
                 <a className="btn btn-default" onClick={this.handleCancel}>Cancelar</a>
                 <button className="btn btn-primary" type="submit">Salvar</button>
             </form>
-
-            <Footer />
         </div>;
     }
 

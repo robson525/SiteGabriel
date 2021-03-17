@@ -18,9 +18,8 @@ namespace Rifa
         private Mail() { }
         #endregion
 
-        private const string From = "charifagabriel@gmail.com";
-        private const string Password = "77TQ3bLr26xbJs4";
-        private const string ReservedMessage = "";
+        public const string From = "charifagabriel@gmail.com";
+        public const string Password = "77TQ3bLr26xbJs4";
 
 
         public async Task<bool> Reserved(RifaItem item)

@@ -51,6 +51,32 @@ body {
     margin: 0;
 }
 
+#central .info-title {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: -2px 2px 1px grey;
+    font-family: 'Lobster', cursive;
+    margin: 10px 0 0 0;
+}
+
+#central .info-title.status-0 {
+    color: white;
+    text-shadow: 1px 1px 1px black, -1px -1px 1px black;
+}
+#central .info-title.status-1 {
+    color: aqua;
+    text-shadow: 1px 1px 1px black, -1px -1px 1px black;
+}
+#central .info-title.status-2 {
+    color: cadetblue;
+    text-shadow: 1px 1px 1px black, -1px -1px 1px black;
+}
+#central .info-title.status-3 {
+    color: springgreen;
+    text-shadow: 1px 1px 1px black, -1px -1px 1px black;
+}
+
 #loading {
     text-align: center;
 }
@@ -88,14 +114,20 @@ body {
 #table .cell.odd {
     background-color: azure;
 }
+#table .cell.status-0,
 #table .cell.even {
     background-color: white;
 }
-#table .cell.reserved {
+#table .cell.reserved,
+#table .cell.status-2{
     background-color: cadetblue;
 }
-
-
+#table .cell.status-1 {
+    background-color: aqua;
+}
+#table .cell.status-3 {
+    background-color: springgreen;
+}
 
 .form .btn {
     margin-right: 5px;
