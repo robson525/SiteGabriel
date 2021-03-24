@@ -42,7 +42,6 @@ export class EditAdmin extends React.Component<RouteComponentProps<{}>, EditStat
             });
 
         this.handleSave = this.handleSave.bind(this);
-        this.handleCancel = this.handleCancel.bind(this);
     }
 
     public render() {
@@ -52,46 +51,21 @@ export class EditAdmin extends React.Component<RouteComponentProps<{}>, EditStat
 
     private handleSave(e: any) {
         e.preventDefault();
-
-        let item: RifaItem = {
-            id: this.state.id,
-            name: e.target.name.value,
-            email: e.target.email.value,
-            comment: e.target.comment.value,
-            status: 0
-        };
-
-        fetch(`api/Item/${this.state.id}`,
+        
+        fetch(`api/Admin/${this.state.id}`,
             {
-                method: 'POST',
-                body: JSON.stringify(item),
+                method: 'PUT',
                 headers: HEADER,
             })
             .then((response) => {
                 if (response.ok) {
-                    this.setState({ saved: true, message: "Numero reservado com sucess" });
+                    this.setState({ saved: true, message: "Numero salvo com sucess" });
                 } else {
-                    let msg = "";
-                    switch (response.status) {
-                        case 401: msg = "O Numero selecionado já está em uso"; break;
-                        default: msg = "Operação Inválida"; break;
-                    }
-                    this.setState({ error: true, message: msg });
+                    this.setState({ error: true, message: "Operação Inválida" });
                 }
             });
     }
-
-    private handleCancel() {
-        fetch(`api/Item/${this.state.id}`,
-            {
-                method: 'DELETE',
-                headers: HEADER,
-            })
-            .then(() => {
-                this.props.history.goBack();
-            });
-    }
-
+    
     private loadEdit(item: RifaItem) {
         return <div>
             <form className="form" onSubmit={this.handleSave}>
@@ -110,8 +84,8 @@ export class EditAdmin extends React.Component<RouteComponentProps<{}>, EditStat
                     <textarea className="form-control" id="comment" name="comment" placeholder="Mensagem" defaultValue={item.comment} rows={5} maxLength={500} />
                 </div>
 
-                <a className="btn btn-default" onClick={this.handleCancel}>Cancelar</a>
-                <button className="btn btn-primary" type="submit">Salvar</button>
+                <a className="btn btn-default" onClick={() => this.props.history.goBack()}>Voltar</a>
+                <button className={`btn btn-primary ${item.status !== 2 ? 'hidden' : ''}`} type="submit">Pago</button>
             </form>
         </div>;
     }

@@ -19,8 +19,12 @@ namespace Rifa.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RifaItem>))]
         public async Task<IActionResult> CheckLogged()
         {
+#if DEBUG
+            HttpContext.Session.SetString(SessionInfoId, HttpContext.Session.Id);
+#else
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(SessionInfoId)))
                 return BadRequest();
+#endif
 
             return Ok(DataBase.Instance.Items);
         }
@@ -69,6 +73,35 @@ namespace Rifa.Controllers
             }
 
             return Ok(item);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Save([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                Logger.Instance.WriteError($"ModelState Is not Valid");
+                return BadRequest(ModelState);
+            }
+
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(SessionInfoId)))
+            {
+                Logger.Instance.WriteWarning($"Session is empty");
+                return Unauthorized();
+            }
+
+            RifaItem item = DataBase.Instance.Items.FirstOrDefault(_ => _.Id == id);
+            if (item == null)
+            {
+                Logger.Instance.WriteError($"Id '{id}' didn't exist");
+                return BadRequest();
+            }
+
+            item.SetStatus(RifaItem.ItemStatus.Paid);
+            DataBase.Instance.Save(item);
+            Logger.Instance.WriteInfo($"Paying: {item}");
+
+            return Ok();
         }
     }
 }

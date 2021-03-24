@@ -6,6 +6,13 @@ body {
     padding: 0 !important;
 }
 
+.center {
+    text-align: center;
+}
+.right {
+    text-align: right;
+}
+
 #react-app {
     display: flex;
     flex-direction: column;
@@ -84,11 +91,15 @@ body {
     width: 10%;
 }
 
-#table {
+#table{
     display: flex;
     flex-wrap: wrap;
     align-content: stretch;
     margin-top: 20px;
+}
+
+#table-admin {
+
 }
 
 #table .cell {
@@ -104,6 +115,22 @@ body {
     text-decoration: none;
 }
 
+#table-admin .cell {
+    flex: 1;
+    margin: 5px;
+    padding: 1px 5px;
+    border-radius: 10px;
+    box-shadow: -1px 1px 1px grey;
+    display: flex;
+    align-items: stretch;
+}
+
+#table-admin .cell > span {
+    display: flex;
+    align-items:center;
+    justify-content:center;
+}
+
 #table a.cel:not(.reserved):hover {
     background-color: #9CCAD1;
 }
@@ -114,18 +141,18 @@ body {
 #table .cell.odd {
     background-color: azure;
 }
-#table .cell.status-0,
+#table-admin .cell.status-0,
 #table .cell.even {
     background-color: white;
 }
 #table .cell.reserved,
-#table .cell.status-2{
+#table-admin .cell.status-2{
     background-color: cadetblue;
 }
-#table .cell.status-1 {
+#table-admin .cell.status-1 {
     background-color: aqua;
 }
-#table .cell.status-3 {
+#table-admin .cell.status-3 {
     background-color: springgreen;
 }
 

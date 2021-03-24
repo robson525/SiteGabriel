@@ -92,22 +92,39 @@ export class Admin extends React.Component<RouteComponentProps<{}>, TableState> 
             <p className="info-title status-2">Reservados: {itens.filter(item => item.status == 2).length}</p>
             <p className="info-title status-3">Pagos: {itens.filter(item => item.status == 3).length}</p>
 
-            <div id="table">
-                {itens.map(item =>
-                    <a key={`item-${item.id}`}
-                        className={`cell status-${item.status}`}
-                        onClick={() => item.status > 1 ? this.handleEdit(item) : null}
-                        data-toggle="tooltip" data-placement="left" title="Tooltip on left"
-                    >
-                        {item.id}
-                    </a>
-                )}
+            <div id="table-admin">
+                {(new Array())
+                    .concat(itens.filter(item => item.status === 2))
+                    .concat(itens.filter(item => item.status === 3))
+                    .map(item =>
+                        <div key={`item-${item.id}`}
+                            className={`cell status-${item.status}`}>
+                            <span className="center" style={{ flex: '1' }}>{item.id}</span>
+                            <span style={{ flex: '9' }}>{item.name}</span>
+                            <span style={{ flex: '8' }}>{item.email}</span>
+                            <span className="right" style={{ flex: '1' }}>
+                                <a className={`btn ${item.status > 1 ? '' : 'disabled'}`} onClick={() => item.status > 1 ? this.handleEdit(item) : null}>
+                                    <span className="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                </a>
+                            </span>
+                        </div>
+                    )}
             </div>
         </div >;
     }
 
     private handleEdit(item: RifaItem) {
         this.props.history.push("/editadmin/" + item.id);
+    }
+
+    private getStatusDescription(status: number) {
+        switch (status) {
+            case 0: return "Disponivel";
+            case 1: return "Reservando";
+            case 2: return "Reservado";
+            case 3: return "Pago";
+            default: return "Desconhecido";
+        }
     }
 
 }
